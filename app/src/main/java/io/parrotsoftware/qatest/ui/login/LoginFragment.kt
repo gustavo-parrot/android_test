@@ -6,18 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import io.parrotsoftware.qa_network.interactors.impl.NetworkInteractorImpl
 import io.parrotsoftware.qatest.databinding.FragmentLoginBinding
 import io.parrotsoftware.qatest.common.observe
 import io.parrotsoftware.qatest.common.toast
 import io.parrotsoftware.qatest.data.managers.impl.UserManagerImpl
 import io.parrotsoftware.qatest.data.repositories.impl.UserRepositoryImpl
-
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
-    private lateinit var viewModel: LoginViewModel
+    private val viewModel: LoginViewModel by viewModels()
     private lateinit var binding: FragmentLoginBinding
 
     override fun onCreateView(
@@ -28,11 +30,11 @@ class LoginFragment : Fragment() {
         binding = FragmentLoginBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-
-        // TODO Inject
-        viewModel.userManager = UserManagerImpl(requireContext())
-        viewModel.userRepository = UserRepositoryImpl(viewModel.userManager, NetworkInteractorImpl())
+//        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+//
+//        // TODO Inject
+//        viewModel.userManager = UserManagerImpl(requireContext())
+//        viewModel.userRepository = UserRepositoryImpl(viewModel.userManager, NetworkInteractorImpl())
 
         binding.viewModel = viewModel
 

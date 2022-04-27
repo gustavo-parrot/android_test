@@ -8,8 +8,11 @@ import io.parrotsoftware.qatest.data.domain.RepositoryResult
 import io.parrotsoftware.qatest.data.domain.Store
 import io.parrotsoftware.qatest.data.managers.UserManager
 import io.parrotsoftware.qatest.data.repositories.UserRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UserRepositoryImpl(
+@Singleton
+class UserRepositoryImpl @Inject constructor(
     private val userManager: UserManager,
     private val networkInteractor: NetworkInteractor
 ) : UserRepository {
@@ -58,14 +61,18 @@ class UserRepositoryImpl(
     }
 
     override suspend fun getCredentials(): RepositoryResult<Credentials> {
-        return RepositoryResult(Credentials(
-            userManager.getAccess(), userManager.getRefresh()
-        ))
+        return RepositoryResult(
+            Credentials(
+                userManager.getAccess(), userManager.getRefresh()
+            )
+        )
     }
 
     override suspend fun getStore(): RepositoryResult<Store> {
-        return RepositoryResult(Store(
-            userManager.getStoreUuid(), userManager.getStoreName()
-        ))
+        return RepositoryResult(
+            Store(
+                userManager.getStoreUuid(), userManager.getStoreName()
+            )
+        )
     }
 }

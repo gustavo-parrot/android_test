@@ -1,17 +1,22 @@
 package io.parrotsoftware.qatest.ui.login
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.parrotsoftware.qatest.data.managers.UserManager
 import io.parrotsoftware.qatest.data.repositories.UserRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel(), LifecycleObserver {
-
-    lateinit var userManager: UserManager
-    lateinit var userRepository: UserRepository
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    application: Application,
+    private val userManager: UserManager,
+    private val userRepository: UserRepository
+) : AndroidViewModel(application), LifecycleObserver {
 
     private val viewState = MutableLiveData<LoginViewState>()
     fun getViewState() = viewState

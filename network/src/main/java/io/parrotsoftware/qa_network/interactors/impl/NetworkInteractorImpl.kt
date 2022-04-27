@@ -4,17 +4,20 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import dagger.Provides
 import io.parrotsoftware.qa_network.domain.APIError
 import io.parrotsoftware.qa_network.domain.NetworkError
 import io.parrotsoftware.qa_network.domain.NetworkErrorType
 import io.parrotsoftware.qa_network.domain.NetworkResult
 import io.parrotsoftware.qa_network.interactors.NetworkInteractor
-import java.io.IOException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import java.io.IOException
+import javax.inject.Singleton
 
-class NetworkInteractorImpl: NetworkInteractor {
+@Singleton
+class NetworkInteractorImpl : NetworkInteractor {
 
     override suspend fun <T> safeApiCall(
         dispatcher: CoroutineDispatcher,
@@ -28,6 +31,7 @@ class NetworkInteractorImpl: NetworkInteractor {
         }
     }
 
+    @Provides
     private fun createError(throwable: Throwable): NetworkError {
         return when (throwable) {
             is IOException -> {

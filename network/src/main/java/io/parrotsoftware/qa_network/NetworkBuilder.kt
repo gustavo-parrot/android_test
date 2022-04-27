@@ -3,12 +3,17 @@ package io.parrotsoftware.qa_network
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import io.parrotsoftware.qatest.QATestApplication
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.Date
 import java.util.concurrent.TimeUnit
-
+@Module
+@InstallIn(QATestApplication::class)
 object NetworkBuilder {
 
     private val defaultMoshiConverterFactory by lazy {
@@ -18,7 +23,7 @@ object NetworkBuilder {
             .build()
         MoshiConverterFactory.create(moshi)
     }
-
+    @Provides
     fun build(
         url: String
     ): Retrofit {

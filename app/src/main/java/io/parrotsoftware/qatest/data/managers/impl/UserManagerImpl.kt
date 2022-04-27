@@ -3,8 +3,13 @@ package io.parrotsoftware.qatest.data.managers.impl
 import android.content.Context
 import io.parrotsoftware.qatest.common.PrefsStorage
 import io.parrotsoftware.qatest.data.managers.UserManager
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UserManagerImpl(ctx: Context) : UserManager, PrefsStorage(ctx, "ParrotPrefs") {
+@Singleton
+class UserManagerImpl @Inject constructor(
+    ctx: Context
+) : UserManager, PrefsStorage(ctx, "ParrotPrefs") {
 
     override fun saveCredentials(access: String, refresh: String) {
         setString(KEY_ACCESS, access)
@@ -32,5 +37,4 @@ class UserManagerImpl(ctx: Context) : UserManager, PrefsStorage(ctx, "ParrotPref
         const val KEY_STORE_UUID = "key_store_uuid"
         const val KEY_STORE_NAME = "key_store_name"
     }
-
 }

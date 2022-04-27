@@ -8,8 +8,11 @@ import io.parrotsoftware.qatest.data.domain.Category
 import io.parrotsoftware.qatest.data.domain.Product
 import io.parrotsoftware.qatest.data.domain.RepositoryResult
 import io.parrotsoftware.qatest.data.repositories.ProductRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ProductRepositoryImpl(
+@Singleton
+class ProductRepositoryImpl @Inject constructor(
     private val networkInteractor: NetworkInteractor
 ) : ProductRepository {
 
