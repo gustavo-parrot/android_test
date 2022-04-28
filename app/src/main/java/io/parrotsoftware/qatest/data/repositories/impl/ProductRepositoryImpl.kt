@@ -4,6 +4,8 @@ import io.parrotsoftware.qa_network.domain.requests.ApiUpdateProductRequest
 import io.parrotsoftware.qa_network.domain.responses.ApiProductAvailability
 import io.parrotsoftware.qa_network.interactors.NetworkInteractor
 import io.parrotsoftware.qa_network.services.ParrotApi
+import io.parrotsoftware.qatest.data.database.dao.ProductsDao
+import io.parrotsoftware.qatest.data.database.entities.ProductEntity
 import io.parrotsoftware.qatest.data.domain.Category
 import io.parrotsoftware.qatest.data.domain.Product
 import io.parrotsoftware.qatest.data.domain.RepositoryResult
@@ -13,7 +15,8 @@ import javax.inject.Singleton
 
 @Singleton
 class ProductRepositoryImpl @Inject constructor(
-    private val networkInteractor: NetworkInteractor
+    private val networkInteractor: NetworkInteractor,
+    private val productsDao: ProductsDao
 ) : ProductRepository {
 
     override suspend fun getProducts(
@@ -69,5 +72,27 @@ class ProductRepositoryImpl @Inject constructor(
             )
 
         return RepositoryResult()
+    }
+
+    override suspend fun getProductsFromDB(): RepositoryResult<List<Product>> {
+        val products = productsDao.getAllProducts()
+        return RepositoryResult(
+            products.map {
+                with(it) {
+                    Product(
+                        id, name, description, image, price, isAvailable,
+                        Category(
+                            it.category.id,
+                            it.category.name,
+                            it.category.position
+                        )
+                    )
+                }
+            }.toList()
+        )
+    }
+
+    override suspend fun saveProductList(products: List<ProductEntity>) {
+        productsDao.insertAll(products)
     }
 }

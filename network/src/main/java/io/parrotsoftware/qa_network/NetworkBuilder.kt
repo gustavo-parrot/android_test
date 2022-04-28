@@ -6,14 +6,16 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import io.parrotsoftware.qatest.QATestApplication
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.Date
+import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
+
 @Module
-@InstallIn(QATestApplication::class)
+@InstallIn(SingletonComponent::class)
 object NetworkBuilder {
 
     private val defaultMoshiConverterFactory by lazy {
@@ -24,6 +26,7 @@ object NetworkBuilder {
         MoshiConverterFactory.create(moshi)
     }
     @Provides
+    @Singleton
     fun build(
         url: String
     ): Retrofit {

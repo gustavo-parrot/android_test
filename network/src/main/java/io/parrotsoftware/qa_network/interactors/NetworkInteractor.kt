@@ -10,5 +10,4 @@ interface NetworkInteractor {
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         apiCall: suspend () -> T
     ): NetworkResult<T>
-
 }

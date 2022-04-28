@@ -1,9 +1,10 @@
 package io.parrotsoftware.qatest.ui.list
 
 import android.os.Bundle
-import android.view.*
+import android.view.* // ktlint-disable no-wildcard-imports
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.parrotsoftware.qatest.R
 import io.parrotsoftware.qatest.common.observe
@@ -57,7 +58,10 @@ class ListFragment :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_logout -> {
-                TODO("Implement")
+                viewModel.logOut()
+                findNavController().navigate(
+                    ListFragmentDirections.actionListFragmentToLoginFragment()
+                )
             }
         }
         return super.onOptionsItemSelected(item)

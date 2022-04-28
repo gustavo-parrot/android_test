@@ -14,7 +14,7 @@ import javax.inject.Singleton
 @Singleton
 class UserRepositoryImpl @Inject constructor(
     private val userManager: UserManager,
-    private val networkInteractor: NetworkInteractor
+    private val networkInteractor: NetworkInteractor,
 ) : UserRepository {
 
     override suspend fun login(email: String, password: String): RepositoryResult<Nothing> {

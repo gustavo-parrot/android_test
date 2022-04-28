@@ -16,6 +16,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
+import javax.inject.Singleton
 
 interface ParrotApiService {
 
@@ -43,8 +44,8 @@ interface ParrotApiService {
     ): ApiSingleResponse<ApiProduct>
 }
 
+@Singleton
 object ParrotApi {
-
     val service: ParrotApiService by lazy {
         NetworkBuilder.build(BuildConfig.BASE_URL).create(ParrotApiService::class.java)
     }

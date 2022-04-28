@@ -1,9 +1,13 @@
 package io.parrotsoftware.qatest.ui.list
 
+import android.annotation.SuppressLint
 import android.app.Application
-import androidx.lifecycle.*
+import android.util.Log
+import androidx.lifecycle.* // ktlint-disable no-wildcard-imports
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.parrotsoftware.qatest.Util.EntityUtils
 import io.parrotsoftware.qatest.data.domain.Product
+import io.parrotsoftware.qatest.data.managers.UserManager
 import io.parrotsoftware.qatest.data.repositories.ProductRepository
 import io.parrotsoftware.qatest.data.repositories.UserRepository
 import kotlinx.coroutines.launch
@@ -13,9 +17,12 @@ import javax.inject.Inject
 class ListViewModel @Inject constructor(
     application: Application,
     private val userRepository: UserRepository,
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val entityUtils: EntityUtils,
+    private val userManager: UserManager
 ) : AndroidViewModel(application), LifecycleObserver {
 
+    private val TAG = "ListViewModel"
     private val _viewState = MutableLiveData<ListViewState>()
     fun getViewState() = _viewState
 
@@ -30,6 +37,11 @@ class ListViewModel @Inject constructor(
         fetchProducts()
     }
 
+    fun logOut() {
+        userManager.logOut()
+    }
+
+    @SuppressLint("LogNotTimber")
     fun fetchProducts() {
         _viewState.value = ListViewState.Loading
 
@@ -48,17 +60,25 @@ class ListViewModel @Inject constructor(
             )
 
             if (response.isError) {
-                _viewState.value = ListViewState.ErrorLoadingItems
-                return@launch
+                try {
+                    products = productRepository.getProductsFromDB().requiredResult.toMutableList()
+                } catch (e: Error) {
+                    Log.e(TAG, "fetchProducts response is Error: $e")
+                } finally {
+                    _viewState.value = ListViewState.ErrorLoadingItems
+//                    return@launch
+                }
+            } else {
+                products = response.requiredResult.toMutableList()
+                val expandedCategories = createCategoriesList()
+                val productEntities = entityUtils.createListProductEntities(response.requiredResult.toMutableList())
+                productRepository.saveProductList(productEntities)
+                _viewState.value = ListViewState.ItemsLoaded(expandedCategories)
             }
-
-            products = response.requiredResult.toMutableList()
-            val expandedCategories = createCategoriesList()
-            _viewState.value = ListViewState.ItemsLoaded(expandedCategories)
         }
     }
 
-    fun updateProduct(productId: String, isAvilable: Boolean) {
+    private fun updateProduct(productId: String, isAvilable: Boolean) {
         viewModelScope.launch {
             val credentials = userRepository.getCredentials()
 
