@@ -1,29 +1,17 @@
 package io.parrotsoftware.qatest.ui.list
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import io.parrotsoftware.qa_network.interactors.impl.NetworkInteractorImpl
 import io.parrotsoftware.qatest.R
-import io.parrotsoftware.qatest.databinding.FragmentListBinding
 import io.parrotsoftware.qatest.common.observe
 import io.parrotsoftware.qatest.common.toast
-import io.parrotsoftware.qatest.data.managers.impl.UserManagerImpl
-import io.parrotsoftware.qatest.data.repositories.impl.ProductRepositoryImpl
-import io.parrotsoftware.qatest.data.repositories.impl.UserRepositoryImpl
+import io.parrotsoftware.qatest.databinding.FragmentListBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
+class ListFragment : Fragment(), CategoryListener {
 
-class ListFragment :
-    Fragment(),
-    CategoryListener {
-
-    private lateinit var viewModel: ListViewModel
+    private val viewModel: ListViewModel by viewModel()
     private lateinit var binding: FragmentListBinding
 
     private val categoryController by lazy {
@@ -42,16 +30,6 @@ class ListFragment :
     ): View {
         binding = FragmentListBinding.inflate(inflater)
         binding.lifecycleOwner = this
-
-        viewModel = ViewModelProvider(this).get(ListViewModel::class.java)
-
-        // TODO Inject
-        viewModel.userRepository = UserRepositoryImpl(
-            UserManagerImpl(requireContext()),
-            NetworkInteractorImpl()
-        )
-        viewModel.productRepository = ProductRepositoryImpl(NetworkInteractorImpl())
-
         binding.viewModel = viewModel
 
         lifecycle.addObserver(viewModel)
@@ -92,7 +70,8 @@ class ListFragment :
             ListViewState.ErrorUpdatingItem -> {
                 requireContext().toast("Error al actualizar el producto")
             }
-            else -> {}
+            else -> {
+            }
         }
     }
 
