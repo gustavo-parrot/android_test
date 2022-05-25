@@ -4,7 +4,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.parrotsoftware.qatest.data.managers.UserManager
+import io.parrotsoftware.qatest.data.datasources.local.user.UserManager
 import io.parrotsoftware.qatest.data.repositories.UserRepository
 import kotlinx.coroutines.launch
 

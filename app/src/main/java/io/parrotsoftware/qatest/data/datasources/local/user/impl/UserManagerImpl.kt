@@ -1,8 +1,8 @@
-package io.parrotsoftware.qatest.data.managers.impl
+package io.parrotsoftware.qatest.data.datasources.local.user.impl
 
 import android.content.Context
 import io.parrotsoftware.qatest.common.PrefsStorage
-import io.parrotsoftware.qatest.data.managers.UserManager
+import io.parrotsoftware.qatest.data.datasources.local.user.UserManager
 
 class UserManagerImpl(ctx: Context) : UserManager, PrefsStorage(ctx, "ParrotPrefs") {
 

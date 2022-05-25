@@ -1,4 +1,4 @@
-package io.parrotsoftware.qatest.data.managers
+package io.parrotsoftware.qatest.data.datasources.local.user
 
 interface UserManager {
 

@@ -6,7 +6,7 @@ import io.parrotsoftware.qa_network.services.ParrotApi
 import io.parrotsoftware.qatest.data.domain.Credentials
 import io.parrotsoftware.qatest.data.domain.RepositoryResult
 import io.parrotsoftware.qatest.data.domain.Store
-import io.parrotsoftware.qatest.data.managers.UserManager
+import io.parrotsoftware.qatest.data.datasources.local.user.UserManager
 import io.parrotsoftware.qatest.data.repositories.UserRepository
 
 class UserRepositoryImpl(

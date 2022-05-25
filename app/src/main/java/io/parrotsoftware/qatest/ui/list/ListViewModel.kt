@@ -11,11 +11,10 @@ import io.parrotsoftware.qatest.data.repositories.ProductRepository
 import io.parrotsoftware.qatest.data.repositories.UserRepository
 import kotlinx.coroutines.launch
 
-class ListViewModel : ViewModel(), LifecycleObserver {
-
-    lateinit var userRepository: UserRepository
-    lateinit var productRepository: ProductRepository
-
+class ListViewModel(
+    private var userRepository: UserRepository,
+    private var productRepository: ProductRepository
+) : ViewModel(), LifecycleObserver {
     private val _viewState = MutableLiveData<ListViewState>()
     fun getViewState() = _viewState
 
@@ -25,7 +24,6 @@ class ListViewModel : ViewModel(), LifecycleObserver {
 
     private var products = mutableListOf<Product>()
     private val categoriesExpanded = mutableMapOf<String, Boolean>()
-
 
     fun initView() {
         fetchProducts()
@@ -49,6 +47,7 @@ class ListViewModel : ViewModel(), LifecycleObserver {
             )
 
             if (response.isError) {
+                //TODO Get the expanded categories from the local data source
                 _viewState.value = ListViewState.ErrorLoadingItems
                 return@launch
             }

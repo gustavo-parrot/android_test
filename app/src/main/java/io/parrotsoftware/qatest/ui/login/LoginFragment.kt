@@ -12,7 +12,7 @@ import io.parrotsoftware.qa_network.interactors.impl.NetworkInteractorImpl
 import io.parrotsoftware.qatest.databinding.FragmentLoginBinding
 import io.parrotsoftware.qatest.common.observe
 import io.parrotsoftware.qatest.common.toast
-import io.parrotsoftware.qatest.data.managers.impl.UserManagerImpl
+import io.parrotsoftware.qatest.data.datasources.local.user.impl.UserManagerImpl
 import io.parrotsoftware.qatest.data.repositories.impl.UserRepositoryImpl
 
 class LoginFragment : Fragment() {
