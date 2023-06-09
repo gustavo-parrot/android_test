@@ -6,15 +6,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.parrotsoftware.qatest.data.domain.Product
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.parrotsoftware.qatest.data.domain.local.Product
+import io.parrotsoftware.qatest.data.managers.UserManager
 import io.parrotsoftware.qatest.data.repositories.ProductRepository
 import io.parrotsoftware.qatest.data.repositories.UserRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ListViewModel : ViewModel(), LifecycleObserver {
-
-    lateinit var userRepository: UserRepository
-    lateinit var productRepository: ProductRepository
+@HiltViewModel
+class ListViewModel @Inject constructor(
+    private val userManager: UserManager,
+    private val userRepository: UserRepository,
+    private val productRepository: ProductRepository
+) : ViewModel(), LifecycleObserver {
 
     private val _viewState = MutableLiveData<ListViewState>()
     fun getViewState() = _viewState
@@ -50,9 +55,7 @@ class ListViewModel : ViewModel(), LifecycleObserver {
 
             if (response.isError) {
                 _viewState.value = ListViewState.ErrorLoadingItems
-                return@launch
             }
-
             products = response.requiredResult.toMutableList()
             val expandedCategories = createCategoriesList()
             _viewState.value = ListViewState.ItemsLoaded(expandedCategories)
@@ -118,5 +121,9 @@ class ListViewModel : ViewModel(), LifecycleObserver {
                 productGroup
             )
         }
+    }
+
+    fun clearAuth(){
+        userManager.clearAuth()
     }
 }

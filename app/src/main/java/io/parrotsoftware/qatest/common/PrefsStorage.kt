@@ -39,8 +39,9 @@ abstract class PrefsStorage(context: Context, prefsName: String) {
         }
     }
 
-    fun clear() {
+    fun clear(key: String) {
         with(sharedPreferences.edit()) {
+            remove(key)
             clear()
             apply()
         }

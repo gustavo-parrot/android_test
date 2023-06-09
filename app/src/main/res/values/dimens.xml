@@ -2,5 +2,18 @@
 <resources>
 
     <dimen name="divider_category_height">1dp</dimen>
+    <dimen name="dimen_empty">0dp</dimen>
+    <dimen name="dimen_8dp">8dp</dimen>
+    <dimen name="dimen_12dp">12dp</dimen>
+    <dimen name="dimen_16dp">16dp</dimen>
+    <dimen name="dimen_24dp">24dp</dimen>
+    <dimen name="dimen_32dp">32dp</dimen>
+    <dimen name="dimen_48dp">48dp</dimen>
+
+    //font
+
+    <dimen name="dimen_18sp">18sp</dimen>
+    <dimen name="dimen_24sp">24sp</dimen>
+
 
 </resources>

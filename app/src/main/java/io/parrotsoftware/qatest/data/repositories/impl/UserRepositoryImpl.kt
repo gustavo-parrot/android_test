@@ -2,21 +2,24 @@ package io.parrotsoftware.qatest.data.repositories.impl
 
 import io.parrotsoftware.qa_network.domain.requests.ApiAuthRequest
 import io.parrotsoftware.qa_network.interactors.NetworkInteractor
-import io.parrotsoftware.qa_network.services.ParrotApi
+import io.parrotsoftware.qa_network.interactors.impl.NetworkInteractorImpl
+import io.parrotsoftware.qa_network.services.ParrotApiService
 import io.parrotsoftware.qatest.data.domain.Credentials
 import io.parrotsoftware.qatest.data.domain.RepositoryResult
 import io.parrotsoftware.qatest.data.domain.Store
 import io.parrotsoftware.qatest.data.managers.UserManager
 import io.parrotsoftware.qatest.data.repositories.UserRepository
+import javax.inject.Inject
 
-class UserRepositoryImpl(
+class UserRepositoryImpl @Inject constructor (
+    private val networkInteractor: NetworkInteractor,
     private val userManager: UserManager,
-    private val networkInteractor: NetworkInteractor
+    private val remoteDataSource: ParrotApiService
 ) : UserRepository {
 
     override suspend fun login(email: String, password: String): RepositoryResult<Nothing> {
         val responseAuth = networkInteractor.safeApiCall {
-            ParrotApi.service.auth(ApiAuthRequest(email, password))
+            remoteDataSource.auth(ApiAuthRequest(email, password))
         }
         if (responseAuth.isError)
             return RepositoryResult(
@@ -26,7 +29,7 @@ class UserRepositoryImpl(
 
         val credentials = responseAuth.requiredResult
         val responseUser = networkInteractor.safeApiCall {
-            ParrotApi.service.getMe("Bearer ${credentials.accessToken}")
+            remoteDataSource.getMe("Bearer ${credentials.accessToken}")
         }
 
         if (responseUser.isError) {

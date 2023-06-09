@@ -1,6 +1,6 @@
 package io.parrotsoftware.qatest.data.domain
 
-data class Category(
+data class CategoryNetworkEntity(
     val id: String,
     val name: String,
     val position: Int
