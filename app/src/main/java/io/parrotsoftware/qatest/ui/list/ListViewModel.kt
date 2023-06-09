@@ -3,7 +3,6 @@ package io.parrotsoftware.qatest.ui.list
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.parrotsoftware.qatest.data.domain.Product
@@ -19,9 +18,9 @@ class ListViewModel : ViewModel(), LifecycleObserver {
     private val _viewState = MutableLiveData<ListViewState>()
     fun getViewState() = _viewState
 
-    val isLoading: LiveData<Boolean> = Transformations.map(_viewState) {
-        it is ListViewState.Loading
-    }
+    private val _isLoading = MutableLiveData<Boolean>()
+
+    val isLoading: LiveData<Boolean> get() = _isLoading
 
     private var products = mutableListOf<Product>()
     private val categoriesExpanded = mutableMapOf<String, Boolean>()

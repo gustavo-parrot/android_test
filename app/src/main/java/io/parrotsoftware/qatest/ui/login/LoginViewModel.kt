@@ -4,47 +4,64 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.parrotsoftware.qatest.data.managers.UserManager
+import io.parrotsoftware.qatest.data.managers.impl.UserManagerImpl
 import io.parrotsoftware.qatest.data.repositories.UserRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel(), LifecycleObserver {
+@HiltViewModel
+class LoginViewModel
+@Inject constructor(
+    val userManager: UserManager,
+    private val userRepository: UserRepository
+) : ViewModel(), LifecycleObserver {
 
-    lateinit var userManager: UserManager
-    lateinit var userRepository: UserRepository
 
-    private val viewState = MutableLiveData<LoginViewState>()
-    fun getViewState() = viewState
+    //expose not mutable variable to the view
+    private val _viewState = MutableStateFlow<LoginViewState>(LoginViewState.Idle)
+    val viewState : StateFlow<LoginViewState> get() = _viewState
 
-    val email = MutableLiveData("android-challenge@parrotsoftware.io")
-    val password = MutableLiveData("8mngDhoPcB3ckV7X")
+    val loginData = MutableStateFlow(LoginData())
+
 
     fun initView() {
         viewModelScope.launch {
             val response = userRepository.userExists()
             if (response.isError) {
-                viewState.value = LoginViewState.LoginError
+                _viewState.value = LoginViewState.LoginError
                 return@launch
             }
 
             if (response.requiredResult) {
-                viewState.value = LoginViewState.LoginSuccess
+                _viewState.value = LoginViewState.LoginSuccess
             }
         }
     }
 
     fun onLoginPortraitClicked() {
         viewModelScope.launch {
-            val response = userRepository.login(email.value!!, password.value!!)
+            //avoid to use !!
+            val response = userRepository.login(loginData.value.email,loginData.value.password)
             if (response.isError) {
-                viewState.value = LoginViewState.LoginError
+                _viewState.value = LoginViewState.LoginError
             } else {
-                viewState.value = LoginViewState.LoginSuccess
+                _viewState.value = LoginViewState.LoginSuccess
             }
         }
     }
 
     fun navigated() {
-        viewState.value = LoginViewState.Idle
+        _viewState.value = LoginViewState.Idle
     }
+
+    data class LoginData(
+        var email : String = "android-challenge@parrotsoftware.io",
+        var password : String = "8mngDhoPcB3ckV7X"
+    )
+
+
 }
