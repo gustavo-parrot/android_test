@@ -6,14 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.parrotsoftware.qa_network.interactors.NetworkInteractor
-import io.parrotsoftware.qa_network.interactors.impl.NetworkInteractorImpl
 import io.parrotsoftware.qatest.data.managers.UserManager
 import io.parrotsoftware.qatest.data.managers.impl.UserManagerImpl
-import io.parrotsoftware.qatest.data.repositories.ProductRepository
-import io.parrotsoftware.qatest.data.repositories.UserRepository
-import io.parrotsoftware.qatest.data.repositories.impl.ProductRepositoryImpl
-import io.parrotsoftware.qatest.data.repositories.impl.UserRepositoryImpl
 import javax.inject.Singleton
 
 /***
@@ -29,7 +23,7 @@ class AppModule {
         @ApplicationContext context: Context
     ) : UserManager = UserManagerImpl(context)
 
-    @Provides
+    /*@Provides
     @Singleton
     fun userRepositoryProvider(
         userManager: UserManager,
@@ -40,6 +34,6 @@ class AppModule {
     @Singleton
     fun productRepositoryProvider(
         networkInteractor: NetworkInteractor
-    ) : ProductRepository = ProductRepositoryImpl(networkInteractor)
+    ) : ProductRepository = ProductRepositoryImpl(networkInteractor)*/
 
 }
