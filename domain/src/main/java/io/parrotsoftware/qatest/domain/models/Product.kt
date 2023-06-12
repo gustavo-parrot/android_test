@@ -1,5 +1,10 @@
-package io.parrotsoftware.qatest.data.domain
+package io.parrotsoftware.qatest.domain.models
 
+/**
+ * Product
+ *
+ * @author (c) 2023, Parrot Inc.
+ */
 data class Product(
     val id: String,
     val name: String,

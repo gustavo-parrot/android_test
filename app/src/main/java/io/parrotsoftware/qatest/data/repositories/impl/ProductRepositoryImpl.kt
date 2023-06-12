@@ -4,8 +4,8 @@ import io.parrotsoftware.qa_network.domain.requests.ApiUpdateProductRequest
 import io.parrotsoftware.qa_network.domain.responses.ApiProductAvailability
 import io.parrotsoftware.qa_network.interactors.NetworkInteractor
 import io.parrotsoftware.qa_network.services.ParrotApi
-import io.parrotsoftware.qatest.data.domain.Category
-import io.parrotsoftware.qatest.data.domain.Product
+import io.parrotsoftware.qatest.domain.models.Category
+import io.parrotsoftware.qatest.domain.models.Product
 import io.parrotsoftware.qatest.data.domain.RepositoryResult
 import io.parrotsoftware.qatest.data.repositories.ProductRepository
 

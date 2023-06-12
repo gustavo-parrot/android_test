@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.parrotsoftware.qatest.data.domain.Product
+import io.parrotsoftware.qatest.domain.models.Product
 import io.parrotsoftware.qatest.data.repositories.ProductRepository
 import io.parrotsoftware.qatest.data.repositories.UserRepository
 import kotlinx.coroutines.launch

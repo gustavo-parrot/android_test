@@ -1,8 +1,8 @@
 package io.parrotsoftware.qatest.data.repositories
 
-import io.parrotsoftware.qatest.data.domain.Credentials
+import io.parrotsoftware.qatest.domain.models.Credentials
 import io.parrotsoftware.qatest.data.domain.RepositoryResult
-import io.parrotsoftware.qatest.data.domain.Store
+import io.parrotsoftware.qatest.domain.models.Store
 
 interface UserRepository {
 

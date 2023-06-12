@@ -1,7 +1,7 @@
 package io.parrotsoftware.qatest.ui.list
 
-import io.parrotsoftware.qatest.data.domain.Category
-import io.parrotsoftware.qatest.data.domain.Product
+import io.parrotsoftware.qatest.domain.models.Category
+import io.parrotsoftware.qatest.domain.models.Product
 
 
 data class EnabledProduct(
