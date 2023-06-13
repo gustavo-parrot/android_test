@@ -1,8 +1,8 @@
 package io.parrotsoftware.qa_data.datasources.impl
 
-import io.parrotsoftware.qa_data.CredentialsD
-import io.parrotsoftware.qa_data.RepositoryResultD
-import io.parrotsoftware.qa_data.StoreD
+import io.parrotsoftware.qa_data.domain.Credentials
+import io.parrotsoftware.qa_data.domain.RepositoryResult
+import io.parrotsoftware.qa_data.domain.Store
 import io.parrotsoftware.qa_data.UserManagerD
 import io.parrotsoftware.qa_data.datasources.UserRemoteDataSource
 import io.parrotsoftware.qa_network.domain.requests.ApiAuthRequest
@@ -13,12 +13,12 @@ class UserRemoteDataSourceImpl(
     private val userManager: UserManagerD,
     private val networkInteractor: NetworkInteractor
 ) : UserRemoteDataSource {
-    override suspend fun login(email: String, password: String): RepositoryResultD<Nothing> {
+    override suspend fun login(email: String, password: String): RepositoryResult<Nothing> {
         val responseAuth = networkInteractor.safeApiCall {
             ParrotApi.service.auth(ApiAuthRequest(email, password))
         }
         if (responseAuth.isError)
-            return RepositoryResultD(
+            return RepositoryResult(
                 errorCode = responseAuth.requiredError.requiredErrorCode,
                 errorMessage = responseAuth.requiredError.requiredErrorMessage
             )
@@ -29,14 +29,14 @@ class UserRemoteDataSourceImpl(
         }
 
         if (responseUser.isError) {
-            return RepositoryResultD(
+            return RepositoryResult(
                 errorCode = responseUser.requiredError.requiredErrorCode,
                 errorMessage = responseUser.requiredError.requiredErrorMessage
             )
         }
 
         if (responseUser.requiredResult.result.stores.isEmpty()) {
-            return RepositoryResultD(
+            return RepositoryResult(
                 errorCode = "",
                 errorMessage = "Store Not Found"
             )
@@ -49,22 +49,26 @@ class UserRemoteDataSourceImpl(
         userManager.saveCredentials(apiCredentials.accessToken, apiCredentials.refreshToken)
         userManager.saveStore(apiStore.uuid, apiStore.name)
 
-        return RepositoryResultD()
+        return RepositoryResult()
     }
 
-    override suspend fun userExists(): RepositoryResultD<Boolean> {
-        return RepositoryResultD(userManager.isAuth())
+    override suspend fun userExists(): RepositoryResult<Boolean> {
+        return RepositoryResult(userManager.isAuth())
     }
 
-    override suspend fun getCredentials(): RepositoryResultD<CredentialsD> {
-        return RepositoryResultD(CredentialsD(
+    override suspend fun getCredentials(): RepositoryResult<Credentials> {
+        return RepositoryResult(
+            Credentials(
             userManager.getAccess(), userManager.getRefresh()
-        ))
+        )
+        )
     }
 
-    override suspend fun getStore(): RepositoryResultD<StoreD> {
-        return RepositoryResultD(StoreD(
+    override suspend fun getStore(): RepositoryResult<Store> {
+        return RepositoryResult(
+            Store(
             userManager.getStoreUuid(), userManager.getStoreName()
-        ))
+        )
+        )
     }
 }

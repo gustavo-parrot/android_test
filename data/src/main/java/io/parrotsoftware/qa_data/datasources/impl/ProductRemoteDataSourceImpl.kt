@@ -1,8 +1,8 @@
 package io.parrotsoftware.qa_data.datasources.impl
 
-import io.parrotsoftware.qa_data.CategoryD
-import io.parrotsoftware.qa_data.ProductD
-import io.parrotsoftware.qa_data.RepositoryResultD
+import io.parrotsoftware.qa_data.domain.Category
+import io.parrotsoftware.qa_data.domain.Product
+import io.parrotsoftware.qa_data.domain.RepositoryResult
 import io.parrotsoftware.qa_data.datasources.ProductRemoteDataSource
 import io.parrotsoftware.qa_network.domain.requests.ApiUpdateProductRequest
 import io.parrotsoftware.qa_network.domain.responses.ApiProductAvailability
@@ -13,36 +13,36 @@ class ProductRemoteDataSourceImpl (
        private val networkInteractor: NetworkInteractor
         ): ProductRemoteDataSource {
 
-    override suspend fun getProducts(accessToken: String, storeId: String) : RepositoryResultD<List<ProductD>> {
+    override suspend fun getProducts(accessToken: String, storeId: String) : RepositoryResult<List<Product>> {
         val response = networkInteractor.safeApiCall {
             ParrotApi.service.getProducts("Bearer $accessToken", storeId)
         }
 
         if (response.isError)
-            return RepositoryResultD(
+            return RepositoryResult(
                 errorCode = response.requiredError.requiredErrorCode,
                 errorMessage = response.requiredError.requiredErrorMessage
             )
 
         val products = response.requiredResult.results.map {
-            ProductD(
+            Product(
                 it.uuid,
                 it.name,
                 it.description,
                 it.imageUrl,
                 it.price,
                 it.availability == ApiProductAvailability.AVAILABLE,
-                CategoryD(it.category.uuid, it.category.name, it.category.sortPosition)
+                Category(it.category.uuid, it.category.name, it.category.sortPosition)
             )
         }
-        return RepositoryResultD(products)
+        return RepositoryResult(products)
     }
 
     override suspend fun setProductState(
         accessToken: String,
         productId: String,
         isAvailable: Boolean
-    ) :  RepositoryResultD<Nothing>{
+    ) : RepositoryResult<Nothing> {
 
         val body = ApiUpdateProductRequest(
             if (isAvailable) ApiProductAvailability.AVAILABLE
@@ -58,12 +58,12 @@ class ProductRemoteDataSourceImpl (
         }
 
         if (response.isError)
-            return RepositoryResultD(
+            return RepositoryResult(
                 errorCode = response.requiredError.requiredErrorCode,
                 errorMessage = response.requiredError.requiredErrorMessage
             )
 
-        return RepositoryResultD()
+        return RepositoryResult()
 
     }
 }

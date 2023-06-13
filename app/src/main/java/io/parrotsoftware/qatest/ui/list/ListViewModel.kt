@@ -6,12 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.parrotsoftware.qa_data.ProductD
-import io.parrotsoftware.qa_data.repositories.ProductRepositoryD
-import io.parrotsoftware.qa_data.repositories.UserRepositoryD
-import io.parrotsoftware.qatest.data.domain.Product
-import io.parrotsoftware.qatest.data.repositories.ProductRepository
-import io.parrotsoftware.qatest.data.repositories.UserRepository
+import io.parrotsoftware.qa_data.domain.Product
+import io.parrotsoftware.qa_data.repositories.ProductRepository
+import io.parrotsoftware.qa_data.repositories.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,8 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ListViewModel
     @Inject constructor(
-    private val userRepositoryD: UserRepositoryD,
-    private val productRepositoryD: ProductRepositoryD
+        private val userRepositoryD: UserRepository,
+        private val productRepositoryD: ProductRepository
     )
     : ViewModel(), LifecycleObserver {
 
@@ -33,7 +30,7 @@ class ListViewModel
 
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private var products = mutableListOf<ProductD>()
+    private var products = mutableListOf<Product>()
     private val categoriesExpanded = mutableMapOf<String, Boolean>()
 
 

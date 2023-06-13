@@ -1,4 +1,4 @@
-package io.parrotsoftware.qatest.data.domain
+package io.parrotsoftware.qa_data.domain
 
 data class Store(
     val id: String,

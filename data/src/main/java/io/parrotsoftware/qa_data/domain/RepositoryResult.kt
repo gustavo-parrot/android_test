@@ -1,4 +1,5 @@
-package io.parrotsoftware.qatest.data.domain
+package io.parrotsoftware.qa_data.domain
+
 
 data class RepositoryError(
     val code: String,

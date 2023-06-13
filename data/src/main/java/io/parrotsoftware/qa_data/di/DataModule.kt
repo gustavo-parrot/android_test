@@ -12,10 +12,9 @@ import io.parrotsoftware.qa_data.datasources.ProductRemoteDataSource
 import io.parrotsoftware.qa_data.datasources.UserRemoteDataSource
 import io.parrotsoftware.qa_data.datasources.impl.ProductRemoteDataSourceImpl
 import io.parrotsoftware.qa_data.datasources.impl.UserRemoteDataSourceImpl
-import io.parrotsoftware.qa_data.repositories.ProductRepositoryD
-import io.parrotsoftware.qa_data.repositories.UserRepositoryD
+import io.parrotsoftware.qa_data.repositories.ProductRepository
+import io.parrotsoftware.qa_data.repositories.UserRepository
 import io.parrotsoftware.qa_network.interactors.NetworkInteractor
-import org.intellij.lang.annotations.PrintFormat
 import javax.inject.Singleton
 
 @Module
@@ -40,7 +39,7 @@ class DataModule {
     fun userRepositoryDProvider(
         userRemoteDataSource: UserRemoteDataSource,
         userManagerD: UserManagerD
-        ):UserRepositoryD = UserRepositoryD(userRemoteDataSource,userManagerD)
+        ):UserRepository = UserRepository(userRemoteDataSource,userManagerD)
 
     @Provides
     @Singleton
@@ -52,8 +51,8 @@ class DataModule {
     @Singleton
     fun productRepositoryDProvider(
         productRemoteDataSource: ProductRemoteDataSource
-    ):ProductRepositoryD
-        =  ProductRepositoryD(productRemoteDataSource)
+    ):ProductRepository
+        =  ProductRepository(productRemoteDataSource)
 
 
 }

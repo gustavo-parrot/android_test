@@ -1,14 +1,14 @@
 package io.parrotsoftware.qa_data.repositories
 
-import io.parrotsoftware.qa_data.ProductD
-import io.parrotsoftware.qa_data.RepositoryResultD
+import io.parrotsoftware.qa_data.domain.Product
+import io.parrotsoftware.qa_data.domain.RepositoryResult
 import io.parrotsoftware.qa_data.datasources.ProductRemoteDataSource
 import javax.inject.Inject
 
-class ProductRepositoryD @Inject
+class ProductRepository @Inject
 constructor(private val productRemoteDataSource: ProductRemoteDataSource) {
 
-suspend fun getProducts(accessToken: String, storeId: String): RepositoryResultD<List<ProductD>>  =
+suspend fun getProducts(accessToken: String, storeId: String): RepositoryResult<List<Product>> =
   productRemoteDataSource.getProducts(accessToken, storeId)
 
 
@@ -16,7 +16,7 @@ suspend fun getProducts(accessToken: String, storeId: String): RepositoryResultD
         accessToken: String,
         productId: String,
         isAvailable: Boolean
-    ): RepositoryResultD<Nothing>  =
+    ): RepositoryResult<Nothing> =
 
         productRemoteDataSource.setProductState(accessToken, productId, isAvailable)
 

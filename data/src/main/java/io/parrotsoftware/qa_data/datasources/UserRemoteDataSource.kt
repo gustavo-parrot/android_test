@@ -1,15 +1,15 @@
 package io.parrotsoftware.qa_data.datasources
 
-import io.parrotsoftware.qa_data.CredentialsD
-import io.parrotsoftware.qa_data.RepositoryResultD
-import io.parrotsoftware.qa_data.StoreD
+import io.parrotsoftware.qa_data.domain.Credentials
+import io.parrotsoftware.qa_data.domain.RepositoryResult
+import io.parrotsoftware.qa_data.domain.Store
 
 interface UserRemoteDataSource {
-     suspend fun login(email: String, password: String): RepositoryResultD<Nothing>
+     suspend fun login(email: String, password: String): RepositoryResult<Nothing>
 
-    suspend fun userExists(): RepositoryResultD<Boolean>
+    suspend fun userExists(): RepositoryResult<Boolean>
 
-    suspend fun getCredentials(): RepositoryResultD<CredentialsD>
+    suspend fun getCredentials(): RepositoryResult<Credentials>
 
-    suspend fun getStore(): RepositoryResultD<StoreD>
+    suspend fun getStore(): RepositoryResult<Store>
 }
