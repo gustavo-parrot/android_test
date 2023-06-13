@@ -1,8 +1,8 @@
-package io.parrotsoftware.qa_data
+package io.parrotsoftware.qa_data.common
 
 import android.content.Context
 
-abstract class PrefsStorageD (context: Context, prefsName: String) {
+abstract class PrefsStorage (context: Context, prefsName: String) {
     private val sharedPreferences = context.getSharedPreferences(prefsName, Context.MODE_PRIVATE)
 
     fun setString(key: String, value: String) {

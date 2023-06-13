@@ -1,10 +1,12 @@
-package io.parrotsoftware.qa_data
+package io.parrotsoftware.qa_data.managers.impl
 
 import android.content.Context
+import io.parrotsoftware.qa_data.common.PrefsStorage
+import io.parrotsoftware.qa_data.managers.UserManager
 import javax.inject.Inject
 
-class UserManagerDImpl
-@Inject constructor(ctx: Context) : UserManagerD , PrefsStorageD(ctx, "ParrotPrefs")
+class UserManagerImpl
+@Inject constructor(ctx: Context) : UserManager, PrefsStorage(ctx, "ParrotPrefs")
 {
     override fun saveCredentials(access: String, refresh: String) {
         setString(KEY_ACCESS, access)

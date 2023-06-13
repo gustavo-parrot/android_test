@@ -1,7 +1,6 @@
-package io.parrotsoftware.qatest.data.managers
+package io.parrotsoftware.qa_data.managers
 
 interface UserManager {
-
     fun saveCredentials(access: String, refresh: String)
 
     fun getAccess(): String

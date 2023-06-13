@@ -6,8 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.parrotsoftware.qa_data.UserManagerD
-import io.parrotsoftware.qa_data.UserManagerDImpl
+import io.parrotsoftware.qa_data.managers.UserManager
+import io.parrotsoftware.qa_data.managers.impl.UserManagerImpl
 import io.parrotsoftware.qa_data.datasources.ProductRemoteDataSource
 import io.parrotsoftware.qa_data.datasources.UserRemoteDataSource
 import io.parrotsoftware.qa_data.datasources.impl.ProductRemoteDataSourceImpl
@@ -25,12 +25,12 @@ class DataModule {
     @Singleton
     fun userManagerProvider(
         @ApplicationContext context: Context
-    ) : UserManagerD = UserManagerDImpl(context)
+    ) : UserManager = UserManagerImpl(context)
 
     @Provides
     @Singleton
     fun userRemoteDataSource(
-        userManagerD: UserManagerD,
+        userManagerD: UserManager,
         networkInteractor: NetworkInteractor
     ) : UserRemoteDataSource = UserRemoteDataSourceImpl(userManagerD,networkInteractor)
 
@@ -38,7 +38,7 @@ class DataModule {
     @Singleton
     fun userRepositoryDProvider(
         userRemoteDataSource: UserRemoteDataSource,
-        userManagerD: UserManagerD
+        userManagerD: UserManager
         ):UserRepository = UserRepository(userRemoteDataSource,userManagerD)
 
     @Provides

@@ -3,14 +3,14 @@ package io.parrotsoftware.qa_data.datasources.impl
 import io.parrotsoftware.qa_data.domain.Credentials
 import io.parrotsoftware.qa_data.domain.RepositoryResult
 import io.parrotsoftware.qa_data.domain.Store
-import io.parrotsoftware.qa_data.UserManagerD
+import io.parrotsoftware.qa_data.managers.UserManager
 import io.parrotsoftware.qa_data.datasources.UserRemoteDataSource
 import io.parrotsoftware.qa_network.domain.requests.ApiAuthRequest
 import io.parrotsoftware.qa_network.interactors.NetworkInteractor
 import io.parrotsoftware.qa_network.services.ParrotApi
 
 class UserRemoteDataSourceImpl(
-    private val userManager: UserManagerD,
+    private val userManager: UserManager,
     private val networkInteractor: NetworkInteractor
 ) : UserRemoteDataSource {
     override suspend fun login(email: String, password: String): RepositoryResult<Nothing> {
