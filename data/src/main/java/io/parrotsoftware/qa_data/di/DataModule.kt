@@ -45,7 +45,7 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun userRepositoryDProvider(
+    fun userRepositoryProvider(
         userRemoteDataSource: UserRemoteDataSource,
         userLocalDataSource: UserLocalDataSource
         ):UserRepository = UserRepository(userRemoteDataSource,userLocalDataSource)
@@ -58,7 +58,7 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun productRepositoryDProvider(
+    fun productRepositoryProvider(
         productRemoteDataSource: ProductRemoteDataSource
     ):ProductRepository
         =  ProductRepository(productRemoteDataSource)

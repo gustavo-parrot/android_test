@@ -13,7 +13,8 @@ class ProductRemoteDataSourceImpl (
        private val networkInteractor: NetworkInteractor
         ): ProductRemoteDataSource {
 
-    override suspend fun getProducts(accessToken: String, storeId: String) : RepositoryResult<List<Product>> {
+    override suspend fun getProducts(accessToken: String, storeId: String)
+    : RepositoryResult<List<Product>> {
         val response = networkInteractor.safeApiCall {
             ParrotApi.service.getProducts("Bearer $accessToken", storeId)
         }
