@@ -17,8 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ListViewModel
     @Inject constructor(
-        private val userRepositoryD: UserRepository,
-        private val productRepositoryD: ProductRepository
+        private val userRepository: UserRepository,
+        private val productRepository: ProductRepository
     )
     : ViewModel(), LifecycleObserver {
 
@@ -42,15 +42,15 @@ class ListViewModel
         _viewState.value = ListViewState.Loading
 
         viewModelScope.launch {
-            val credentials = userRepositoryD.getCredentials()
-            val store = userRepositoryD.getStore()
+            val credentials = userRepository.getCredentials()
+            val store = userRepository.getStore()
 
             if (credentials.isError || store.isError) {
                 _viewState.value = ListViewState.ErrorLoadingItems
                 return@launch
             }
 
-            val response = productRepositoryD.getProducts(
+            val response = productRepository.getProducts(
                 credentials.requiredResult.access,
                 store.requiredResult.id
             )
@@ -66,16 +66,16 @@ class ListViewModel
         }
     }
 
-    fun updateProduct(productId: String, isAvilable: Boolean) {
+    private fun updateProduct(productId: String, isAvilable: Boolean) {
         viewModelScope.launch {
-           val credentials = userRepositoryD.getCredentials()
+           val credentials = userRepository.getCredentials()
 
             if (credentials.isError) {
                 _viewState.value = ListViewState.ErrorUpdatingItem
                 return@launch
             }
 
-            val response = productRepositoryD.setProductState(
+            val response = productRepository.setProductState(
                 credentials.requiredResult.access,
                 productId,
                 isAvilable
