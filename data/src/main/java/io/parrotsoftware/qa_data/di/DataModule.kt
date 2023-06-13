@@ -8,8 +8,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.parrotsoftware.qa_data.UserManagerD
 import io.parrotsoftware.qa_data.UserManagerDImpl
+import io.parrotsoftware.qa_data.datasources.ProductRemoteDataSource
 import io.parrotsoftware.qa_data.datasources.UserRemoteDataSource
+import io.parrotsoftware.qa_data.datasources.impl.ProductRemoteDataSourceImpl
 import io.parrotsoftware.qa_data.datasources.impl.UserRemoteDataSourceImpl
+import io.parrotsoftware.qa_data.repositories.ProductRepositoryD
 import io.parrotsoftware.qa_data.repositories.UserRepositoryD
 import io.parrotsoftware.qa_network.interactors.NetworkInteractor
 import org.intellij.lang.annotations.PrintFormat
@@ -35,6 +38,22 @@ class DataModule {
     @Provides
     @Singleton
     fun userRepositoryDProvider(
-        userRemoteDataSource: UserRemoteDataSource
-    ):UserRepositoryD = UserRepositoryD(userRemoteDataSource)
+        userRemoteDataSource: UserRemoteDataSource,
+        userManagerD: UserManagerD
+        ):UserRepositoryD = UserRepositoryD(userRemoteDataSource,userManagerD)
+
+    @Provides
+    @Singleton
+    fun productRemoteDataSource(
+        networkInteractor: NetworkInteractor
+    ) : ProductRemoteDataSource  = ProductRemoteDataSourceImpl(networkInteractor)
+
+    @Provides
+    @Singleton
+    fun productRepositoryDProvider(
+        productRemoteDataSource: ProductRemoteDataSource
+    ):ProductRepositoryD
+        =  ProductRepositoryD(productRemoteDataSource)
+
+
 }

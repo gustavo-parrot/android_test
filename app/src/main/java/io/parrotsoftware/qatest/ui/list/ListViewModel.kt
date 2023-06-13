@@ -6,6 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.parrotsoftware.qa_data.ProductD
+import io.parrotsoftware.qa_data.repositories.ProductRepositoryD
+import io.parrotsoftware.qa_data.repositories.UserRepositoryD
 import io.parrotsoftware.qatest.data.domain.Product
 import io.parrotsoftware.qatest.data.repositories.ProductRepository
 import io.parrotsoftware.qatest.data.repositories.UserRepository
@@ -17,8 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ListViewModel
     @Inject constructor(
-      //  private val userRepository: UserRepository,
-       // private val productRepository: ProductRepository
+    private val userRepositoryD: UserRepositoryD,
+    private val productRepositoryD: ProductRepositoryD
     )
     : ViewModel(), LifecycleObserver {
 
@@ -30,7 +33,7 @@ class ListViewModel
 
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private var products = mutableListOf<Product>()
+    private var products = mutableListOf<ProductD>()
     private val categoriesExpanded = mutableMapOf<String, Boolean>()
 
 
@@ -42,15 +45,15 @@ class ListViewModel
         _viewState.value = ListViewState.Loading
 
         viewModelScope.launch {
-            /*val credentials = userRepository.getCredentials()
-            val store = userRepository.getStore()
+            val credentials = userRepositoryD.getCredentials()
+            val store = userRepositoryD.getStore()
 
             if (credentials.isError || store.isError) {
                 _viewState.value = ListViewState.ErrorLoadingItems
                 return@launch
             }
 
-            val response = productRepository.getProducts(
+            val response = productRepositoryD.getProducts(
                 credentials.requiredResult.access,
                 store.requiredResult.id
             )
@@ -62,20 +65,20 @@ class ListViewModel
 
             products = response.requiredResult.toMutableList()
             val expandedCategories = createCategoriesList()
-            _viewState.value = ListViewState.ItemsLoaded(expandedCategories)*/
+            _viewState.value = ListViewState.ItemsLoaded(expandedCategories)
         }
     }
 
     fun updateProduct(productId: String, isAvilable: Boolean) {
         viewModelScope.launch {
-           /* val credentials = userRepository.getCredentials()
+           val credentials = userRepositoryD.getCredentials()
 
             if (credentials.isError) {
                 _viewState.value = ListViewState.ErrorUpdatingItem
                 return@launch
             }
 
-            val response = productRepository.setProductState(
+            val response = productRepositoryD.setProductState(
                 credentials.requiredResult.access,
                 productId,
                 isAvilable
@@ -86,7 +89,7 @@ class ListViewModel
                 return@launch
             }
 
-            _viewState.value = ListViewState.ItemUpdated*/
+            _viewState.value = ListViewState.ItemUpdated
         }
     }
 
