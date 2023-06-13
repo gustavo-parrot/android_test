@@ -9,8 +9,10 @@ import dagger.hilt.components.SingletonComponent
 import io.parrotsoftware.qa_data.managers.UserManager
 import io.parrotsoftware.qa_data.managers.impl.UserManagerImpl
 import io.parrotsoftware.qa_data.datasources.ProductRemoteDataSource
+import io.parrotsoftware.qa_data.datasources.UserLocalDataSource
 import io.parrotsoftware.qa_data.datasources.UserRemoteDataSource
 import io.parrotsoftware.qa_data.datasources.impl.ProductRemoteDataSourceImpl
+import io.parrotsoftware.qa_data.datasources.impl.UserLocalDataSourceImpl
 import io.parrotsoftware.qa_data.datasources.impl.UserRemoteDataSourceImpl
 import io.parrotsoftware.qa_data.repositories.ProductRepository
 import io.parrotsoftware.qa_data.repositories.UserRepository
@@ -30,16 +32,23 @@ class DataModule {
     @Provides
     @Singleton
     fun userRemoteDataSource(
-        userManagerD: UserManager,
+        userManager: UserManager,
         networkInteractor: NetworkInteractor
-    ) : UserRemoteDataSource = UserRemoteDataSourceImpl(userManagerD,networkInteractor)
+    ) : UserRemoteDataSource = UserRemoteDataSourceImpl(userManager,networkInteractor)
+
+    @Provides
+    @Singleton
+    fun userLocalDataSource(
+        userManager: UserManager,
+    ) : UserLocalDataSource = UserLocalDataSourceImpl(userManager)
+
 
     @Provides
     @Singleton
     fun userRepositoryDProvider(
         userRemoteDataSource: UserRemoteDataSource,
-        userManagerD: UserManager
-        ):UserRepository = UserRepository(userRemoteDataSource,userManagerD)
+        userLocalDataSource: UserLocalDataSource
+        ):UserRepository = UserRepository(userRemoteDataSource,userLocalDataSource)
 
     @Provides
     @Singleton
