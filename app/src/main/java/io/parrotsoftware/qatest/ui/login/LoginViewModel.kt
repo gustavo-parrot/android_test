@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.parrotsoftware.qa_data.repositories.UserRepository
+import io.parrotsoftware.qatest.BuildConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -40,7 +41,6 @@ class LoginViewModel
 
     fun onLoginPortraitClicked() {
         viewModelScope.launch {
-            //avoid to use !!
             val response = userRepository.login(loginData.value.email, loginData.value.password)
             if (response.isError) {
                 _viewState.value = LoginViewState.LoginError
@@ -55,8 +55,8 @@ class LoginViewModel
     }
 
     data class LoginData(
-        var email: String = "android-challenge@parrotsoftware.io",
-        var password: String = "8mngDhoPcB3ckV7X"
+        var email: String = BuildConfig.US3R_D3F4U1T,
+        var password: String = BuildConfig.P4SS_D3F4U1T
     )
 
 

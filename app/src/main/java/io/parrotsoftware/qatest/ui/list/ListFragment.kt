@@ -1,11 +1,14 @@
 package io.parrotsoftware.qatest.ui.list
 
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.parrotsoftware.qatest.R
@@ -17,7 +20,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ListFragment :
     BaseFragment(),
-    CategoryListener {
+    CategoryListener,MenuProvider {
 
     private lateinit var binding: FragmentListBinding
     private val listViewModel: ListViewModel by viewModels()
@@ -25,27 +28,6 @@ class ListFragment :
     private val categoryController by lazy {
         CategoryController(this)
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.logout_menu, menu)
-    }
-
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_logout -> {
-                TODO("Implement")
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
 
     override fun setLayout(): Int = R.layout.fragment_list
 
@@ -58,6 +40,10 @@ class ListFragment :
             recyclerProducts.adapter = categoryController.adapter
             swipeProducts.setOnRefreshListener { listViewModel.fetchProducts() }
         }
+        (requireActivity() as AppCompatActivity).supportActionBar?.show()
+        val menuHost : MenuHost = requireActivity()
+        menuHost.addMenuProvider(this,viewLifecycleOwner, Lifecycle.State.RESUMED)
+
     }
 
     override fun initObservers() {
@@ -65,12 +51,17 @@ class ListFragment :
             listViewModel.viewState.collect { viewState ->
                 when (viewState) {
                     ListViewState.ErrorLoadingItems -> {
-                        requireContext().toast("Error al cargar los productos")
+                        requireContext()
+                            .toast(
+                                getString(R.string.list_fragment_fetch_products_error)
+                            )
 
                     }
 
                     ListViewState.ErrorUpdatingItem -> {
-                        requireContext().toast("Error al actualizar el producto")
+                        requireContext().toast(
+                            getString(R.string.list_fragment_update_product_error)
+                        )
                     }
 
                     ListViewState.Idle -> {
@@ -103,6 +94,20 @@ class ListFragment :
 
     override fun onProductSelected(product: EnabledProduct) {
         listViewModel.productSelected(product)
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.logout_menu, menu)
+
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
+            R.id.menu_logout -> {
+                //TODO("Implement")
+            }
+        }
+        return true
     }
 
 }

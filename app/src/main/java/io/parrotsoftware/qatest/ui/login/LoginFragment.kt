@@ -38,7 +38,7 @@ class LoginFragment : BaseFragment() {
                     }
 
                     LoginViewState.LoginError -> {
-                        requireContext().toast("Error al iniciar sesión")
+                        requireContext().toast(getString(R.string.login_fragment_error))
                     }
 
                     LoginViewState.LoginSuccess -> {

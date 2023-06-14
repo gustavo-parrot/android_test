@@ -8,6 +8,9 @@
     <string name="hint_password">Contraseña</string>
 
     <string name="category_product_count">%d productos</string>
+    <string name="login_fragment_error">Error al iniciar sesión</string>
+    <string name="list_fragment_fetch_products_error">Error al cargar los productos</string>
+    <string name="list_fragment_update_product_error">Error al actualizar el producto</string>
 
 
 </resources>
