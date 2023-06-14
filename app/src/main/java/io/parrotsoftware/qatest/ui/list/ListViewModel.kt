@@ -3,25 +3,32 @@ package io.parrotsoftware.qatest.ui.list
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.parrotsoftware.qatest.data.domain.Product
-import io.parrotsoftware.qatest.data.repositories.ProductRepository
-import io.parrotsoftware.qatest.data.repositories.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.parrotsoftware.qa_data.domain.Product
+import io.parrotsoftware.qa_data.repositories.ProductRepository
+import io.parrotsoftware.qa_data.repositories.UserRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ListViewModel : ViewModel(), LifecycleObserver {
+@HiltViewModel
+class ListViewModel
+    @Inject constructor(
+        private val userRepository: UserRepository,
+        private val productRepository: ProductRepository
+    )
+    : ViewModel(), LifecycleObserver {
 
-    lateinit var userRepository: UserRepository
-    lateinit var productRepository: ProductRepository
 
-    private val _viewState = MutableLiveData<ListViewState>()
-    fun getViewState() = _viewState
+    private val _viewState = MutableStateFlow<ListViewState>(ListViewState.Idle)
+    val viewState  : StateFlow<ListViewState> get() = _viewState
 
-    val isLoading: LiveData<Boolean> = Transformations.map(_viewState) {
-        it is ListViewState.Loading
-    }
+    private val _isLoading = MutableLiveData<Boolean>()
+
+    val isLoading: LiveData<Boolean> get() = _isLoading
 
     private var products = mutableListOf<Product>()
     private val categoriesExpanded = mutableMapOf<String, Boolean>()
@@ -59,9 +66,9 @@ class ListViewModel : ViewModel(), LifecycleObserver {
         }
     }
 
-    fun updateProduct(productId: String, isAvilable: Boolean) {
+    private fun updateProduct(productId: String, isAvilable: Boolean) {
         viewModelScope.launch {
-            val credentials = userRepository.getCredentials()
+           val credentials = userRepository.getCredentials()
 
             if (credentials.isError) {
                 _viewState.value = ListViewState.ErrorUpdatingItem

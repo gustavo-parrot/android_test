@@ -2,6 +2,8 @@ package io.parrotsoftware.qatest.ui.list
 
 sealed class ListViewState {
 
+    object Idle : ListViewState()
+
     object Loading: ListViewState()
     object ErrorLoadingItems : ListViewState()
     object ErrorUpdatingItem : ListViewState()

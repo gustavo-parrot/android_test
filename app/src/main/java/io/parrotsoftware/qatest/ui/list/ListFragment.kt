@@ -1,106 +1,113 @@
 package io.parrotsoftware.qatest.ui.list
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import io.parrotsoftware.qa_network.interactors.impl.NetworkInteractorImpl
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import io.parrotsoftware.qatest.R
-import io.parrotsoftware.qatest.databinding.FragmentListBinding
-import io.parrotsoftware.qatest.common.observe
+import io.parrotsoftware.qatest.base.BaseFragment
 import io.parrotsoftware.qatest.common.toast
-import io.parrotsoftware.qatest.data.managers.impl.UserManagerImpl
-import io.parrotsoftware.qatest.data.repositories.impl.ProductRepositoryImpl
-import io.parrotsoftware.qatest.data.repositories.impl.UserRepositoryImpl
+import io.parrotsoftware.qatest.databinding.FragmentListBinding
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class ListFragment :
-    Fragment(),
-    CategoryListener {
+    BaseFragment(),
+    CategoryListener,MenuProvider {
 
-    private lateinit var viewModel: ListViewModel
     private lateinit var binding: FragmentListBinding
+    private val listViewModel: ListViewModel by viewModels()
 
     private val categoryController by lazy {
         CategoryController(this)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+    override fun setLayout(): Int = R.layout.fragment_list
+
+    override fun setupView(view: View) {
+        binding = FragmentListBinding.bind(view).apply {
+            lifecycleOwner = this@ListFragment
+            viewModel = listViewModel
+            lifecycleOwner = this@ListFragment
+            lifecycle.addObserver(listViewModel)
+            recyclerProducts.adapter = categoryController.adapter
+            swipeProducts.setOnRefreshListener { listViewModel.fetchProducts() }
+        }
+        (requireActivity() as AppCompatActivity).supportActionBar?.show()
+        val menuHost : MenuHost = requireActivity()
+        menuHost.addMenuProvider(this,viewLifecycleOwner, Lifecycle.State.RESUMED)
+
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentListBinding.inflate(inflater)
-        binding.lifecycleOwner = this
+    override fun initObservers() {
+        lifecycleScope.launch {
+            listViewModel.viewState.collect { viewState ->
+                when (viewState) {
+                    ListViewState.ErrorLoadingItems -> {
+                        requireContext()
+                            .toast(
+                                getString(R.string.list_fragment_fetch_products_error)
+                            )
 
-        viewModel = ViewModelProvider(this).get(ListViewModel::class.java)
+                    }
 
-        // TODO Inject
-        viewModel.userRepository = UserRepositoryImpl(
-            UserManagerImpl(requireContext()),
-            NetworkInteractorImpl()
-        )
-        viewModel.productRepository = ProductRepositoryImpl(NetworkInteractorImpl())
+                    ListViewState.ErrorUpdatingItem -> {
+                        requireContext().toast(
+                            getString(R.string.list_fragment_update_product_error)
+                        )
+                    }
 
-        binding.viewModel = viewModel
+                    ListViewState.Idle -> {
+                        //nothing to do
+                    }
 
-        lifecycle.addObserver(viewModel)
-        observe(viewModel.getViewState(), ::onViewState)
+                    ListViewState.ItemUpdated -> {
+                        //Noting to do
+                    }
 
-        binding.recyclerProducts.adapter = categoryController.adapter
-        binding.swipeProducts.setOnRefreshListener { viewModel.fetchProducts() }
-        return binding.root
-    }
+                    ListViewState.Loading -> {
+                        //TODO implement loading indicator
+                    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.initView()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.logout_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_logout -> {
-                TODO("Implement")
+                    is ListViewState.ItemsLoaded -> {
+                        categoryController.categories = viewState.categories
+                    }
+                }
             }
         }
-        return super.onOptionsItemSelected(item)
     }
 
-    private fun onViewState(state: ListViewState?) {
-        when (state) {
-            ListViewState.ErrorLoadingItems -> {
-                requireContext().toast("Error al cargar los productos")
-            }
-            is ListViewState.ItemsLoaded -> {
-                categoryController.categories = state.categories
-            }
-            ListViewState.ErrorUpdatingItem -> {
-                requireContext().toast("Error al actualizar el producto")
-            }
-            else -> {}
-        }
+    override fun initFlow() {
+        listViewModel.initView()
     }
 
     override fun onCategorySelected(category: ExpandableCategory) {
-        viewModel.categorySelected(category)
+        listViewModel.categorySelected(category)
     }
 
     override fun onProductSelected(product: EnabledProduct) {
-        viewModel.productSelected(product)
+        listViewModel.productSelected(product)
     }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.logout_menu, menu)
+
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
+            R.id.menu_logout -> {
+                //TODO("Implement")
+            }
+        }
+        return true
+    }
+
 }

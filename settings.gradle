@@ -2,3 +2,4 @@ include ':network'
 include ':app'
 rootProject.name = "QA Test"
 
+include ':data'
