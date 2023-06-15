@@ -10,8 +10,14 @@
 package io.parrotsoftware.qatest.di;
 
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.parrotsoftware.qatest.data.authentication.AuthenticationRepository
+import io.parrotsoftware.qatest.data.product.ProductRepository
+import io.parrotsoftware.qatest.usecase.authentication.LoginUseCase
+import io.parrotsoftware.qatest.usecase.authentication.UserExistsUseCase
+import io.parrotsoftware.qatest.usecase.product.GetProductsUseCase
 
 /**
  * UseCaseModule
@@ -21,4 +27,25 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 @Module
 class UseCaseModule {
+
+    @Provides
+    fun provideLoginUseCase(
+        authenticationRepository: AuthenticationRepository
+    ) = LoginUseCase(
+        authenticationRepository
+    )
+
+    @Provides
+    fun provideUserExistsUseCase(
+        authenticationRepository: AuthenticationRepository
+    ) = UserExistsUseCase(
+        authenticationRepository
+    )
+
+    @Provides
+    fun provideGetProductsUseCase(
+        productRepository: ProductRepository
+    ) = GetProductsUseCase(
+        productRepository
+    )
 }

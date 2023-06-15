@@ -9,11 +9,13 @@
 
 package io.parrotsoftware.qatest.core;
 
+import io.parrotsoftware.qa_network.domain.responses.ApiProduct
+
 /**
  * Mapper
  *
  * @author (c) 2023, Parrot Inc.
  */
 interface Mapper<I,O> {
-    fun map(input: I): O
+    fun map(input: List<ApiProduct>): O
 }

@@ -9,6 +9,7 @@
 
 package io.parrotsoftware.qatest.data.product;
 
+import io.parrotsoftware.qatest.data.product.datasources.ProductLocalDataSource
 import io.parrotsoftware.qatest.data.product.datasources.ProductRemoteDataSource
 
 
@@ -18,11 +19,11 @@ import io.parrotsoftware.qatest.data.product.datasources.ProductRemoteDataSource
  * @author (c) 2023, Parrot Inc.
  */
 class ProductRepository(
+    private val productLocalDataSource: ProductLocalDataSource,
     private val productRemoteDataSource: ProductRemoteDataSource
 ) {
-    suspend fun getProducts(accessToken: String, storeId: String) =
-        productRemoteDataSource.getProducts(accessToken, storeId)
+    suspend fun getProducts() = productRemoteDataSource.getProducts()
 
-    suspend fun setProductState(accessToken: String, productId: String, isAvailable: Boolean) =
-        productRemoteDataSource.setProductState(accessToken, productId, isAvailable)
+    suspend fun setProductState(productId: String, isAvailable: Boolean) =
+        productRemoteDataSource.setProductState(productId, isAvailable)
 }

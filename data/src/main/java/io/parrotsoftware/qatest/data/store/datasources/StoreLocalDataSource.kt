@@ -7,18 +7,12 @@
  * the terms of the license agreement you entered into with Umvel Inc.
  */
 
-package io.parrotsoftware.qatest.usecase.product;
-
-import io.parrotsoftware.qatest.data.product.ProductRepository
+package io.parrotsoftware.qatest.data.store.datasources;
 
 /**
- * SetProductStateUseCase
+ * StoreLocalDataSource
  *
  * @author (c) 2023, Parrot Inc.
  */
-class SetProductStateUseCase(
-    private val productRepository: ProductRepository
-) {
-    suspend operator fun invoke(productId: String, isAvailable: Boolean) =
-        productRepository.setProductState(productId, isAvailable)
+interface StoreLocalDataSource {
 }

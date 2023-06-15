@@ -25,6 +25,4 @@ class AuthenticationRepository(
         authenticationRemoteDataSource.login(email, password)
 
     suspend fun userExists() = authenticationRemoteDataSource.userExists()
-
-    suspend fun getCredentials() = authenticationRemoteDataSource.getCredentials()
 }

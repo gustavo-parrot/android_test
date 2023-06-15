@@ -7,17 +7,12 @@
  * the terms of the license agreement you entered into with Umvel Inc.
  */
 
-package io.parrotsoftware.qatest.usecase.authentication;
-
-import io.parrotsoftware.qatest.data.authentication.AuthenticationRepository
+package io.parrotsoftware.qatest.data.product.datasources;
 
 /**
- * GetCredentialsUseCase
+ * ProductLocalDataSource
  *
  * @author (c) 2023, Parrot Inc.
  */
-class GetCredentialsUseCase(
-    private val authenticationRepository: AuthenticationRepository
-) {
-    suspend operator fun invoke() = authenticationRepository.getCredentials()
+interface ProductLocalDataSource {
 }

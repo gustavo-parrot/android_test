@@ -60,16 +60,16 @@ class UserRepositoryImpl(
     override suspend fun getCredentials(): RepositoryResult<Credentials> {
         return RepositoryResult(
             Credentials(
-            userManager.getAccess(), userManager.getRefresh()
-        )
+                userManager.getAccess(), userManager.getRefresh()
+            )
         )
     }
 
     override suspend fun getStore(): RepositoryResult<Store> {
         return RepositoryResult(
             Store(
-            userManager.getStoreUuid(), userManager.getStoreName()
-        )
+                userManager.getStoreUuid(), userManager.getStoreName()
+            )
         )
     }
 }

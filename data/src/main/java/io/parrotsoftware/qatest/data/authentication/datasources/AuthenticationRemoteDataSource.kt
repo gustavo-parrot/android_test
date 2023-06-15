@@ -19,10 +19,8 @@ import io.parrotsoftware.qatest.domain.models.Credentials
  */
 interface AuthenticationRemoteDataSource {
 
-    suspend fun login(email: String, password: String): Result<Unit>
+    suspend fun login(email: String, password: String): Result<String>
 
     suspend fun userExists(): Result<Boolean>
-
-    suspend fun getCredentials(): Result<Credentials>
 
 }

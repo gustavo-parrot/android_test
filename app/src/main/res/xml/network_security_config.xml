@@ -7,4 +7,7 @@
             <certificates src="system" />
         </trust-anchors>
     </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">https://api-staging.parrot.rest/</domain>
+    </domain-config>
 </network-security-config>

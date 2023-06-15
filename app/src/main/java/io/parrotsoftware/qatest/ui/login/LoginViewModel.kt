@@ -4,14 +4,20 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.parrotsoftware.qatest.data.managers.UserManager
+import io.parrotsoftware.qatest.data.models.Result
 import io.parrotsoftware.qatest.data.repositories.UserRepository
+import io.parrotsoftware.qatest.usecase.authentication.LoginUseCase
+import io.parrotsoftware.qatest.usecase.authentication.UserExistsUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel(), LifecycleObserver {
-
-    lateinit var userManager: UserManager
-    lateinit var userRepository: UserRepository
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase,
+    private val userExistsUseCase: UserExistsUseCase
+): ViewModel(), LifecycleObserver {
 
     private val viewState = MutableLiveData<LoginViewState>()
     fun getViewState() = viewState
@@ -21,7 +27,9 @@ class LoginViewModel : ViewModel(), LifecycleObserver {
 
     fun initView() {
         viewModelScope.launch {
+            /*
             val response = userRepository.userExists()
+
             if (response.isError) {
                 viewState.value = LoginViewState.LoginError
                 return@launch
@@ -30,16 +38,33 @@ class LoginViewModel : ViewModel(), LifecycleObserver {
             if (response.requiredResult) {
                 viewState.value = LoginViewState.LoginSuccess
             }
+            */
         }
     }
 
     fun onLoginPortraitClicked() {
         viewModelScope.launch {
-            val response = userRepository.login(email.value!!, password.value!!)
-            if (response.isError) {
-                viewState.value = LoginViewState.LoginError
-            } else {
-                viewState.value = LoginViewState.LoginSuccess
+            when(val result = loginUseCase(email.value!!, password.value!!)) {
+                is Result.Success -> {
+                    userExists()
+                }
+                is Result.Error -> {
+                    viewState.value = LoginViewState.LoginError
+                }
+            }
+        }
+    }
+
+    private fun userExists() {
+        viewModelScope.launch {
+            when(val result = userExistsUseCase()) {
+                is Result.Success -> {
+                    viewState.value = LoginViewState.LoginSuccess
+                }
+                is Result.Error -> {
+                    viewState.value = LoginViewState.LoginError
+                    return@launch
+                }
             }
         }
     }

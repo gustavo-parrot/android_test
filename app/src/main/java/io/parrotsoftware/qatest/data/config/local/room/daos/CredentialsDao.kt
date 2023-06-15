@@ -25,7 +25,7 @@ import io.parrotsoftware.qatest.data.config.local.room.entities.CredentialsEntit
 @Dao
 interface CredentialsDao {
     @Query("SELECT * FROM credentials_table")
-    suspend fun getProducts(): List<CredentialsEntity>
+    suspend fun getCredentials(): List<CredentialsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCredentials(vararg credentialsEntity: CredentialsEntity)

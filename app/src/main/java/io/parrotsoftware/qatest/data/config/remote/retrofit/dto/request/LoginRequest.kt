@@ -7,17 +7,14 @@
  * the terms of the license agreement you entered into with Umvel Inc.
  */
 
-package io.parrotsoftware.qatest.usecase.product;
-
-import io.parrotsoftware.qatest.data.product.ProductRepository
+package io.parrotsoftware.qatest.data.config.remote.retrofit.dto.request;
 
 /**
- * GetProductsUseCase
+ * LoginRequest
  *
- * @author (c) 2023, Parrot Inc.
+ * @author (c) 2023, Umvel Inc.
  */
-class GetProductsUseCase(
-    private val productRepository: ProductRepository
-) {
-    suspend operator fun invoke() = productRepository.getProducts()
-}
+data class LoginRequest (
+    val email: String,
+    val password: String
+)

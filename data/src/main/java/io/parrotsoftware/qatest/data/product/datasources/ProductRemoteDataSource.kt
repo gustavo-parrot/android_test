@@ -19,8 +19,8 @@ import io.parrotsoftware.qatest.domain.models.Product
  */
 interface ProductRemoteDataSource {
 
-    suspend fun getProducts(accessToken: String, storeId: String): Result<List<Product>>
+    suspend fun getProducts(): Result<List<Product>>
 
-    suspend fun setProductState(accessToken: String, productId: String, isAvailable: Boolean): Result<Unit>
+    suspend fun setProductState(productId: String, isAvailable: Boolean): Result<Unit>
 
 }

@@ -9,6 +9,7 @@
 
 package io.parrotsoftware.qatest.data.store;
 
+import io.parrotsoftware.qatest.data.store.datasources.StoreLocalDataSource
 import io.parrotsoftware.qatest.data.store.datasources.StoreRemoteDataSource
 
 /**
@@ -17,6 +18,7 @@ import io.parrotsoftware.qatest.data.store.datasources.StoreRemoteDataSource
  * @author (c) 2023, Parrot Inc.
  */
 class StoreRepository(
+    private val storeLocalDataSource: StoreLocalDataSource,
     private val storeRemoteDataSource: StoreRemoteDataSource
 ) {
     suspend fun getStore() = storeRemoteDataSource.getStore()
