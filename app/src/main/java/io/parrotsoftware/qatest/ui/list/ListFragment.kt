@@ -8,20 +8,22 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.AndroidEntryPoint
 import io.parrotsoftware.qa_network.interactors.impl.NetworkInteractorImpl
 import io.parrotsoftware.qatest.R
 import io.parrotsoftware.qatest.databinding.FragmentListBinding
-import io.parrotsoftware.qatest.common.observe
-import io.parrotsoftware.qatest.common.toast
+import io.parrotsoftware.qatest.core.observe
+import io.parrotsoftware.qatest.core.toast
+import io.parrotsoftware.qatest.core.viewBinding
 import io.parrotsoftware.qatest.data.managers.impl.UserManagerImpl
 import io.parrotsoftware.qatest.data.repositories.impl.ProductRepositoryImpl
 import io.parrotsoftware.qatest.data.repositories.impl.UserRepositoryImpl
+import javax.inject.Inject
 
-
-class ListFragment :
-    Fragment(),
-    CategoryListener {
+@AndroidEntryPoint
+class ListFragment @Inject constructor() : Fragment(), CategoryListener {
 
     private lateinit var viewModel: ListViewModel
     private lateinit var binding: FragmentListBinding
@@ -44,13 +46,6 @@ class ListFragment :
         binding.lifecycleOwner = this
 
         viewModel = ViewModelProvider(this).get(ListViewModel::class.java)
-
-        // TODO Inject
-        viewModel.userRepository = UserRepositoryImpl(
-            UserManagerImpl(requireContext()),
-            NetworkInteractorImpl()
-        )
-        viewModel.productRepository = ProductRepositoryImpl(NetworkInteractorImpl())
 
         binding.viewModel = viewModel
 

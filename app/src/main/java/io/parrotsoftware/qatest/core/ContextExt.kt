@@ -1,4 +1,4 @@
-package io.parrotsoftware.qatest.common
+package io.parrotsoftware.qatest.core
 
 import android.content.Context
 import android.widget.Toast

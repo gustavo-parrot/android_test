@@ -1,6 +1,6 @@
 package io.parrotsoftware.qatest.data.repositories
 
-import io.parrotsoftware.qatest.data.domain.Product
+import io.parrotsoftware.qatest.domain.models.Product
 import io.parrotsoftware.qatest.data.domain.RepositoryResult
 
 interface ProductRepository {

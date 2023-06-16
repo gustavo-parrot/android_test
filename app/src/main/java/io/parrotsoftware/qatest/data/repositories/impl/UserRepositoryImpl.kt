@@ -3,9 +3,9 @@ package io.parrotsoftware.qatest.data.repositories.impl
 import io.parrotsoftware.qa_network.domain.requests.ApiAuthRequest
 import io.parrotsoftware.qa_network.interactors.NetworkInteractor
 import io.parrotsoftware.qa_network.services.ParrotApi
-import io.parrotsoftware.qatest.data.domain.Credentials
+import io.parrotsoftware.qatest.domain.models.Credentials
 import io.parrotsoftware.qatest.data.domain.RepositoryResult
-import io.parrotsoftware.qatest.data.domain.Store
+import io.parrotsoftware.qatest.domain.models.Store
 import io.parrotsoftware.qatest.data.managers.UserManager
 import io.parrotsoftware.qatest.data.repositories.UserRepository
 
@@ -58,14 +58,18 @@ class UserRepositoryImpl(
     }
 
     override suspend fun getCredentials(): RepositoryResult<Credentials> {
-        return RepositoryResult(Credentials(
-            userManager.getAccess(), userManager.getRefresh()
-        ))
+        return RepositoryResult(
+            Credentials(
+                userManager.getAccess(), userManager.getRefresh()
+            )
+        )
     }
 
     override suspend fun getStore(): RepositoryResult<Store> {
-        return RepositoryResult(Store(
-            userManager.getStoreUuid(), userManager.getStoreName()
-        ))
+        return RepositoryResult(
+            Store(
+                userManager.getStoreUuid(), userManager.getStoreName()
+            )
+        )
     }
 }
