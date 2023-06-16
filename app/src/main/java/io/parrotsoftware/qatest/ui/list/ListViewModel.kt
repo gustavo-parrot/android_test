@@ -43,11 +43,10 @@ class ListViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = productsUseCase()) {
                 is Result.Success -> {
-                    /*
-                    products = response.requiredResult.toMutableList()
+                    products = result.data.toMutableList()
                     val expandedCategories = createCategoriesList()
                     _viewState.value = ListViewState.ItemsLoaded(expandedCategories)
-                     */
+
                 }
 
                 is Result.Error -> {

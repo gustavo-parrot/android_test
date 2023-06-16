@@ -17,5 +17,5 @@ import io.parrotsoftware.qa_network.domain.responses.ApiProduct
  * @author (c) 2023, Parrot Inc.
  */
 interface Mapper<I,O> {
-    fun map(input: List<ApiProduct>): O
+    fun map(input: I): O
 }

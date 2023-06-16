@@ -23,6 +23,7 @@ import io.parrotsoftware.qatest.data.implementations.authentication.Authenticati
 import io.parrotsoftware.qatest.data.implementations.authentication.AuthenticationRemoteDataSourceImpl
 import io.parrotsoftware.qatest.data.implementations.product.ProductLocalDataSourceImpl
 import io.parrotsoftware.qatest.data.implementations.product.ProductRemoteDataSourceImpl
+import io.parrotsoftware.qatest.data.implementations.product.mapper.ProductEntityListToProductListMapper
 import io.parrotsoftware.qatest.data.implementations.product.mapper.ProductResponseListToProductListMapper
 import io.parrotsoftware.qatest.data.managers.impl.UserManagerImpl
 import io.parrotsoftware.qatest.data.product.datasources.ProductLocalDataSource
@@ -46,7 +47,8 @@ class DataSourceModule {
     fun provideAuthenticationRemoteDataSource(
         userManagerImpl: UserManagerImpl,
         networkInteractorImpl: NetworkInteractorImpl
-    ): AuthenticationRemoteDataSource = AuthenticationRemoteDataSourceImpl(userManagerImpl, networkInteractorImpl)
+    ): AuthenticationRemoteDataSource =
+        AuthenticationRemoteDataSourceImpl(userManagerImpl, networkInteractorImpl)
 
     @Provides
     fun provideProductLocalDataSource(
@@ -59,8 +61,14 @@ class DataSourceModule {
     fun provideProductRemoteDataSource(
         userManagerImpl: UserManagerImpl,
         networkInteractorImpl: NetworkInteractorImpl,
-        productResponseListToProductListMapper: ProductResponseListToProductListMapper
+        productDao: ProductDao,
+        productResponseListToProductListMapper: ProductResponseListToProductListMapper,
+        productEntityListToProductListMapper: ProductEntityListToProductListMapper
     ): ProductRemoteDataSource = ProductRemoteDataSourceImpl(
-        userManagerImpl, networkInteractorImpl, productResponseListToProductListMapper
+        userManagerImpl,
+        networkInteractorImpl,
+        productDao,
+        productResponseListToProductListMapper,
+        productEntityListToProductListMapper
     )
 }

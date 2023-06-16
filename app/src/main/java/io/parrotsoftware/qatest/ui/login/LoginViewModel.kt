@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.parrotsoftware.qatest.data.managers.UserManager
+import io.parrotsoftware.qatest.data.managers.impl.UserManagerImpl
 import io.parrotsoftware.qatest.data.models.Result
 import io.parrotsoftware.qatest.data.repositories.UserRepository
 import io.parrotsoftware.qatest.usecase.authentication.LoginUseCase
@@ -26,20 +27,7 @@ class LoginViewModel @Inject constructor(
     val password = MutableLiveData("8mngDhoPcB3ckV7X")
 
     fun initView() {
-        viewModelScope.launch {
-            /*
-            val response = userRepository.userExists()
-
-            if (response.isError) {
-                viewState.value = LoginViewState.LoginError
-                return@launch
-            }
-
-            if (response.requiredResult) {
-                viewState.value = LoginViewState.LoginSuccess
-            }
-            */
-        }
+        userExists()
     }
 
     fun onLoginPortraitClicked() {

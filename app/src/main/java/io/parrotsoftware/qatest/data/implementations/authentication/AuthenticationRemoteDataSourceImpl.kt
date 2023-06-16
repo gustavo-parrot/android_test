@@ -9,6 +9,7 @@
 
 package io.parrotsoftware.qatest.data.implementations.authentication;
 
+import io.parrotsoftware.qa_network.domain.NetworkErrorType
 import io.parrotsoftware.qa_network.domain.requests.ApiAuthRequest
 import io.parrotsoftware.qa_network.interactors.NetworkInteractor
 import io.parrotsoftware.qa_network.interactors.impl.NetworkInteractorImpl
@@ -53,9 +54,13 @@ class AuthenticationRemoteDataSourceImpl(
                     ParrotApi.service.getMe(userManagerImpl.getAccess())
                 }
 
-                val store = responseUser.result?.result?.stores?.first()
-                userManagerImpl.saveStore(store!!.uuid, store.name)
-                Result.Success(responseUser.result!!.result.email.isNotEmpty())
+                if (responseUser.networkError?.errorCode.toString() == NetworkErrorType.CONNECTION_ERROR.toString()) {
+                    Result.Success(userManagerImpl.isAuth())
+                }else {
+                    val store = responseUser.result?.result?.stores?.first()
+                    userManagerImpl.saveStore(store!!.uuid, store.name)
+                    Result.Success(userManagerImpl.isAuth())
+                }
             } catch (e: Exception) {
                 Result.Error(e)
             }

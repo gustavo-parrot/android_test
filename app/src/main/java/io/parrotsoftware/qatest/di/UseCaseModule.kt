@@ -18,6 +18,7 @@ import io.parrotsoftware.qatest.data.product.ProductRepository
 import io.parrotsoftware.qatest.usecase.authentication.LoginUseCase
 import io.parrotsoftware.qatest.usecase.authentication.UserExistsUseCase
 import io.parrotsoftware.qatest.usecase.product.GetProductsUseCase
+import io.parrotsoftware.qatest.usecase.product.SetProductStateUseCase
 
 /**
  * UseCaseModule
@@ -46,6 +47,13 @@ class UseCaseModule {
     fun provideGetProductsUseCase(
         productRepository: ProductRepository
     ) = GetProductsUseCase(
+        productRepository
+    )
+
+    @Provides
+    fun provideSetProductStateUseCase(
+        productRepository: ProductRepository
+    ) = SetProductStateUseCase(
         productRepository
     )
 }
